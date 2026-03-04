@@ -111,7 +111,7 @@ function CreateFormPage({ onBack, onSuccess, initialData }) {
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          RETURN TO DASHBOARD
+          RETURN TO HOME
         </button>
 
         <div className="auth-card" style={{ maxWidth: 'none', padding: '32px' }}>

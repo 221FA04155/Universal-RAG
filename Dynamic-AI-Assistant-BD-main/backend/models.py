@@ -43,6 +43,7 @@ class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, description="User's message")
     history: Optional[List[Dict[str, str]]] = Field(None, description="Optional chat history for context")
     model_id: Optional[str] = Field(None, description="Optional model to use for this request")
+    active_dataset: Optional[str] = Field(None, description="Optional filename to focus retrieval on")
     
     @validator('message')
     def validate_message(cls, v):

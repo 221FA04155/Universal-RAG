@@ -405,7 +405,8 @@ async def chat_with_assistant(
             assistant_config=assistant_config,
             user_message=request.message,
             history=request.history,
-            model_name=request.model_id
+            model_name=request.model_id,
+            active_dataset=request.active_dataset
         )
         llm_time = time.time() - llm_start
         logger.info(f"LLM response received in {llm_time:.2f}s")
@@ -476,7 +477,8 @@ async def chat_stream(
                 assistant_config=assistant_config,
                 user_message=request.message,
                 history=request.history,
-                model_name=request.model_id
+                model_name=request.model_id,
+                active_dataset=request.active_dataset
             ):
                 import json
                 try:
@@ -501,6 +503,7 @@ async def chat_stream(
 @app.get("/api/assistants/{assistant_id}", response_model=AssistantInfo)
 async def get_assistant_info(
     assistant_id: str,
+    filename: Optional[str] = None,
     current_user: UserInDB = Depends(get_current_user)
 ):
     try:
@@ -509,8 +512,38 @@ async def get_assistant_info(
         if not assistant_db:
             raise HTTPException(404, "Assistant not found")
             
-        # Lazy load graph data if missing (for legacy assistants)
+        # 1. Base Data from DB
         graph_data = getattr(assistant_db, 'graph_data', {})
+        attributes = getattr(assistant_db, 'attributes', [])
+        sample_questions = getattr(assistant_db, 'sample_questions', [])
+        documents_count = assistant_db.documents_count
+        
+        # 2. IF FILENAME PROVIDED: Deep Filter & Regenerate Focus
+        if filename:
+            try:
+                user_upload_dir = os.path.join(UPLOAD_DIR, current_user.id)
+                found_file = None
+                
+                # Find matching physical file (handling prefix)
+                if os.path.exists(user_upload_dir):
+                    for f in os.listdir(user_upload_dir):
+                        if f.endswith(f"_{filename}") or f == f"{assistant_id}_{filename}":
+                            found_file = os.path.join(user_upload_dir, f)
+                            break
+                
+                if found_file:
+                    logger.info(f"Generating focus insights for specific file: {filename}")
+                    docs, df = DataLoader.load_file(found_file)
+                    # Use specialized loader to get attributes and insights just for this file
+                    attributes = DataLoader.extract_attributes(docs)
+                    graph_data = DataLoader.generate_graph_insights(found_file, assistant_db.data_source_type, df=df)
+                    sample_questions = DataLoader.generate_sample_questions(attributes, assistant_db.data_source_type)
+                    documents_count = len(docs)
+            except Exception as fe:
+                logger.error(f"Failed to isolate file insights for {filename}: {fe}")
+                # Fallback to general data if isolation fails
+
+        # Standard legacy fallback for graph_data if still empty
         if not graph_data:
             try:
                 # Try to regenerate from source file
@@ -556,12 +589,12 @@ async def get_assistant_info(
             name=assistant_db.name,
             data_source_type=assistant_db.data_source_type,
             custom_instructions=assistant_db.custom_instructions,
-            documents_count=assistant_db.documents_count,
+            documents_count=documents_count,
             enable_statistics=assistant_db.enable_statistics,
             enable_alerts=assistant_db.enable_alerts,
             enable_recommendations=assistant_db.enable_recommendations,
-            attributes=getattr(assistant_db, 'attributes', []),
-            sample_questions=getattr(assistant_db, 'sample_questions', []),
+            attributes=attributes,
+            sample_questions=sample_questions,
             uploaded_files=getattr(assistant_db, 'uploaded_files', []),
             file_history=getattr(assistant_db, 'file_history', []),
             graph_data=graph_data,

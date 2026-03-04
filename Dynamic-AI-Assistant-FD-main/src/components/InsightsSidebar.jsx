@@ -8,6 +8,8 @@ function InsightsSidebar({
     dataSourceType,
     fileHistory,
     onDeleteFile,
+    onActivateFile,
+    activeDataset,
     isOpen,
     onClose,
     onToggle,
@@ -311,42 +313,51 @@ function InsightsSidebar({
 
                         {expandedSections.datasets && (
                             <div className="section-body-flow" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {fileHistory.map((file, idx) => (
-                                    <div key={idx} style={{
-                                        padding: '12px 16px',
-                                        background: 'var(--bg-main)',
-                                        borderRadius: 'var(--radius-md)',
-                                        border: '1px solid var(--border-soft)',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        transition: 'all 0.2s'
-                                    }}>
+                                {fileHistory.map((file) => (
+                                    <div
+                                        key={file.filename}
+                                        className={`dataset-item ${activeDataset === file.filename ? 'active' : ''}`}
+                                    >
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', overflow: 'hidden' }}>
-                                            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--accent-navy)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                {file.filename}
-                                            </span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--accent-navy)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {file.filename}
+                                                </span>
+                                                {activeDataset === file.filename && (
+                                                    <span style={{
+                                                        background: 'var(--accent-success)',
+                                                        width: '6px',
+                                                        height: '6px',
+                                                        borderRadius: '50%',
+                                                        boxShadow: '0 0 6px var(--accent-success)'
+                                                    }}></span>
+                                                )}
+                                            </div>
                                             <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: '600' }}>
                                                 {new Date(file.upload_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                             </span>
                                         </div>
-                                        <button
-                                            className="icon-btn"
-                                            onClick={() => onDeleteFile(file.filename)}
-                                            style={{
-                                                color: 'var(--accent-danger)',
-                                                padding: '8px',
-                                                background: 'rgba(239, 68, 68, 0.05)',
-                                                border: 'none',
-                                                borderRadius: '8px',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </button>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <button
+                                                className="dataset-activate-btn"
+                                                onClick={() => onActivateFile && onActivateFile(file.filename)}
+                                                title="Activate Neural Context"
+                                            >
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                                </svg>
+                                            </button>
+                                            <button
+                                                className="dataset-delete-btn"
+                                                onClick={() => onDeleteFile(file.filename)}
+                                                title="Purge Dataset"
+                                            >
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

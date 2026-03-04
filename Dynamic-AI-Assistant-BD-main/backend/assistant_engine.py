@@ -99,11 +99,23 @@ class AssistantEngine:
         assistant_config: Dict[str, Any],
         user_message: str,
         history: Optional[List[Dict[str, str]]] = None,
-        model_name: Optional[str] = None
+        model_name: Optional[str] = None,
+        active_dataset: Optional[str] = None
     ):
         try:
             vector_store = assistant_config["vector_store"]
+            # Rebuild instructions if focusing on a specific dataset
             system_instructions = assistant_config["system_instructions"]
+            if active_dataset:
+                system_instructions = self._build_system_instructions(
+                    custom_instructions=assistant_config.get("custom_instructions", ""),
+                    enable_statistics=assistant_config.get("enable_statistics", False),
+                    enable_alerts=assistant_config.get("enable_alerts", False),
+                    enable_recommendations=assistant_config.get("enable_recommendations", False),
+                    attributes=assistant_config.get("attributes", []),
+                    active_dataset=active_dataset
+                )
+            
             assistant_id = assistant_config.get("assistant_id")
             
             # Use requested model or default
@@ -130,6 +142,9 @@ class AssistantEngine:
             k_docs = 12 if is_comparison else 6
             
             search_filter = {"assistant_id": assistant_id}
+            if active_dataset:
+                # Find by filename suffix or exact match (flexible matching for paths)
+                search_filter["source"] = {"$regex": f"{active_dataset}$"} 
             
             if vector_store is None:
                 logger.error(f"Vector store not found for assistant: {assistant_id}")
@@ -226,11 +241,23 @@ class AssistantEngine:
         assistant_config: Dict[str, Any],
         user_message: str,
         history: Optional[List[Dict[str, str]]] = None,
-        model_name: Optional[str] = None
+        model_name: Optional[str] = None,
+        active_dataset: Optional[str] = None
     ) -> Dict[str, Any]:
         try:
             vector_store = assistant_config["vector_store"]
+            # Rebuild instructions if focusing on a specific dataset
             system_instructions = assistant_config["system_instructions"]
+            if active_dataset:
+                system_instructions = self._build_system_instructions(
+                    custom_instructions=assistant_config.get("custom_instructions", ""),
+                    enable_statistics=assistant_config.get("enable_statistics", False),
+                    enable_alerts=assistant_config.get("enable_alerts", False),
+                    enable_recommendations=assistant_config.get("enable_recommendations", False),
+                    attributes=assistant_config.get("attributes", []),
+                    active_dataset=active_dataset
+                )
+            
             assistant_id = assistant_config.get("assistant_id")
             
             # Use requested model or default
@@ -252,8 +279,10 @@ class AssistantEngine:
             is_comparison = any(word in user_message.lower() for word in comparison_keywords)
             k_docs = 12 if is_comparison else 6
             
-            # Filter by assistant_id to prevent data leakage and ensure retrieval accuracy
+            # Filter by assistant_id and optionally by active_dataset
             search_filter = {"assistant_id": assistant_id}
+            if active_dataset:
+                search_filter["source"] = {"$regex": f"{active_dataset}$"}
             
             scored_docs = self.vector_store_manager.similarity_search_with_score(
                 vector_store=vector_store,
@@ -336,10 +365,14 @@ class AssistantEngine:
         enable_statistics: bool,
         enable_alerts: bool,
         enable_recommendations: bool,
-        attributes: List[str] = None
+        attributes: List[str] = None,
+        active_dataset: Optional[str] = None
     ) -> str:
         
         instructions = [custom_instructions]
+        
+        if active_dataset:
+            instructions.append(f"\nNEURAL FOCUS: You are currently focusing exclusively on the dataset: '{active_dataset}'. Prioritize information from this specific source.")
         
         if attributes:
             instructions.append(f"\nCONTEXTUAL METADATA: This dataset contains the following attributes/columns: {', '.join(attributes)}")

@@ -6,7 +6,6 @@ import CreateFormPage from './pages/CreateFormPage'
 import ChatPage from './pages/ChatPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
-import MyAssistantsPage from './pages/MyAssistantsPage'
 import Layout from './Layout'
 import { fetchWithTimeout } from './utils/api'
 
@@ -25,7 +24,7 @@ function AppContent() {
     const savedPage = localStorage.getItem('currentPage') || 'landing'
     const savedAssistant = localStorage.getItem('currentAssistant')
     if (savedPage === 'chat' && !savedAssistant) return 'landing'
-    const validPages = ['landing', 'login', 'signup', 'create', 'assistants', 'chat']
+    const validPages = ['landing', 'login', 'signup', 'create', 'chat']
     if (!validPages.includes(savedPage)) return 'landing'
     return savedPage
   })
@@ -134,7 +133,7 @@ function AppContent() {
       setCurrentPage('login')
       return
     }
-    setCurrentPage('assistants')
+    setCurrentPage('landing') // Default fallback since dashboard is gone
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [isAuthenticated])
 
@@ -162,10 +161,10 @@ function AppContent() {
           return;
         }
       }
-      setCurrentPage('assistants');
+      setCurrentPage('create');
     } catch (error) {
       console.error("Error navigating to latest assistant:", error);
-      setCurrentPage('assistants');
+      setCurrentPage('create');
     } finally {
       isGettingStarted.current = false;
     }
@@ -203,14 +202,10 @@ function AppContent() {
     // Reset redirect flag on logout
     if (!loading && !isAuthenticated) {
       hasRedirected.current = false
-      // If on a protected page while not authenticated, go to landing
-      if (['create', 'assistants', 'chat'].includes(currentPage)) {
-        setCurrentPage('landing')
-      }
     }
-    // Safety: if on 'chat' page but no assistant is set, go to assistants
+    // Safety: if on 'chat' page but no assistant is set, go to landing
     if (!loading && currentPage === 'chat' && !currentAssistant) {
-      setCurrentPage('assistants')
+      setCurrentPage('landing')
     }
   }, [isAuthenticated, loading, currentPage, currentAssistant, handleGetStarted]);
 
@@ -297,25 +292,18 @@ function AppContent() {
             initialData={initialFormState}
           />
         )}
-        {currentPage === 'assistants' && (
-          <MyAssistantsPage
-            onSelectAssistant={navigateToChat}
-            onCreateNew={navigateToModelSelection}
-            onBack={navigateToLanding}
-          />
-        )}
         {currentPage === 'chat' && currentAssistant && (
           <ChatPage
             assistantId={currentAssistant.id}
             assistantName={currentAssistant.name}
             onNewAssistant={navigateToCreateForm}
             onHome={navigateToLanding}
-            onViewHistory={navigateToMyAssistants}
+            onViewHistory={navigateToLanding}
           />
         )}
 
         {/* Catch-all: if no page matched, show landing */}
-        {!['landing', 'login', 'signup', 'create', 'assistants', 'chat'].includes(currentPage) && (
+        {!['landing', 'login', 'signup', 'create', 'chat'].includes(currentPage) && (
           <LandingPage
             onGetStarted={handleGetStarted}
             onSelectUseCase={handleUseCaseSelect}

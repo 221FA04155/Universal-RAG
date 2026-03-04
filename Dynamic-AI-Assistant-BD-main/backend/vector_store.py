@@ -145,9 +145,33 @@ class VectorStoreManager:
         except Exception as e:
             logger.error(f"Error deleting vector store for {assistant_id}: {str(e)}")
     
+    def _mongo_filter_to_function(self, filter_dict: Optional[dict]):
+        if not filter_dict:
+            return None
+            
+        def filter_func(metadata):
+            for key, val in filter_dict.items():
+                if key == "assistant_id": # Handled by folder structure in FAISS, but for safety:
+                    continue
+                
+                meta_val = metadata.get(key)
+                if isinstance(val, dict) and "$regex" in val:
+                    import re
+                    pattern = val["$regex"]
+                    # If it's a simple suffix pattern from our code
+                    if pattern.endswith("$"):
+                        if not str(meta_val).endswith(pattern[:-1]):
+                            return False
+                    elif not re.search(pattern, str(meta_val)):
+                        return False
+                elif meta_val != val:
+                    return False
+            return True
+        return filter_func
+
     def similarity_search(
         self, 
-        vector_store: Any,
+        vector_store: Any, 
         query: str, 
         k: int = 4,
         filter: Optional[dict] = None
@@ -156,10 +180,9 @@ class VectorStoreManager:
             logger.info(f"Performing similarity search for: {query[:50]}...")
             
             if self.use_local:
-                # Local FAISS doesn't use the 'pre_filter' argument
-                results = vector_store.similarity_search(query=query, k=k)
+                func_filter = self._mongo_filter_to_function(filter)
+                results = vector_store.similarity_search(query=query, k=k, filter=func_filter)
             else:
-                # MongoDB Atlas uses 'pre_filter' argument for metadata filtering
                 results = vector_store.similarity_search(
                     query=query,
                     k=k,
@@ -184,8 +207,8 @@ class VectorStoreManager:
             logger.info(f"Performing similarity search with scores for: {query[:50]}...")
             
             if self.use_local:
-                # FAISS doesn't use the 'pre_filter' in this method in common langchain versions
-                results = vector_store.similarity_search_with_score(query=query, k=k)
+                func_filter = self._mongo_filter_to_function(filter)
+                results = vector_store.similarity_search_with_score(query=query, k=k, filter=func_filter)
             else:
                 results = vector_store.similarity_search_with_score(
                     query=query,

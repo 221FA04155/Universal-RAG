@@ -79,11 +79,6 @@ function Navbar({ onHomeClick, onCreateClick, onMyAssistantsClick, onLoginClick,
                       <div className="dropdown-email">{user?.email}</div>
                     </div>
 
-                    <button onClick={() => handleProfileMenuClick(onMyAssistantsClick)} className="dropdown-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                      Dashboard
-                    </button>
-
                     <button onClick={() => handleProfileMenuClick(onLogoutClick)} className="dropdown-item logout">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                       Sign Out
@@ -135,7 +130,6 @@ function Navbar({ onHomeClick, onCreateClick, onMyAssistantsClick, onLoginClick,
           )}
           {isAuthenticated ? (
             <>
-              <button onClick={() => handleProfileMenuClick(onMyAssistantsClick)} style={mobileLinkStyle}>Dashboard</button>
               <button onClick={() => handleProfileMenuClick(onLogoutClick)} style={{ ...mobileLinkStyle, color: 'var(--accent-danger)' }}>Sign Out</button>
             </>
           ) : (

@@ -27,6 +27,7 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
     data_source_type: '',
     graph_data: {}
   })
+  const [activeDataset, setActiveDataset] = useState(null)
   const [shouldAutoSummarize, setShouldAutoSummarize] = useState(false)
 
   // --- Resizable Sidebar Logic ---
@@ -108,9 +109,12 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
     }
   }, [assistantId])
 
-  const fetchAssistantDetails = async (retryCount = 0) => {
+  const fetchAssistantDetails = async (retryCount = 0, filename = null) => {
     try {
-      const response = await fetchWithTimeout(`${API_BASE_URL}/api/assistants/${assistantId}`, {
+      let url = `${API_BASE_URL}/api/assistants/${assistantId}`;
+      if (filename) url += `?filename=${encodeURIComponent(filename)}`;
+
+      const response = await fetchWithTimeout(url, {
         credentials: 'include'
       })
       if (response.ok) {
@@ -134,7 +138,7 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
 
         if (!isSynthesisComplete && retryCount < 100) {
           // Continue polling until strategic synthesis (questions/graphs) is finished
-          setTimeout(() => fetchAssistantDetails(retryCount + 1), 3000);
+          setTimeout(() => fetchAssistantDetails(retryCount + 1, filename), 3000);
         } else {
           // If this is the completion of synthesis, check for auto-summarization
           // Auto-summarization protocol deactivated per USER request
@@ -206,6 +210,7 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
     }
     setCurrentConversationId(newId)
     setMessages([])
+    setActiveDataset(null) // Clear specialized focus on new chat
     saveConversation(newId, newConv)
     loadConversations()
   }
@@ -280,7 +285,8 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
         body: JSON.stringify({
           assistant_id: assistantId,
           message: text,
-          history: history
+          history: history,
+          active_dataset: activeDataset
         }),
         credentials: 'include'
       })
@@ -369,18 +375,45 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
   }
 
   const handleDeleteFile = async (filename) => {
+    // 1. Optimistic UI Update: Remove file locally first for instant responsiveness
+    setAssistantDetails(prev => ({
+      ...prev,
+      file_history: prev.file_history.filter(f => f.filename !== filename),
+      uploaded_files: prev.uploaded_files.filter(f => f !== filename)
+    }));
+
     try {
       const response = await fetchWithTimeout(`${API_BASE_URL}/api/assistants/${assistantId}/files/${filename}`, {
         method: 'DELETE',
         credentials: 'include'
-      })
-      if (response.ok) {
-        fetchAssistantDetails()
-        addSystemMessage(`Dataset '${filename}' has been successfully purged from the environment.`)
+      });
+
+      if (!response.ok) {
+        // If it fails, silent refresh to restore correct state
+        fetchAssistantDetails();
       }
+      // "No pop notifications" - removed addSystemMessage call
     } catch (error) {
-      console.error('Delete error:', error)
+      console.error('Delete error:', error);
+      fetchAssistantDetails(); // Restore on error
     }
+  }
+
+  const handleActivateFile = (filename) => {
+    setActiveDataset(filename);
+
+    // 1. Clear chat/Start new conversation as requested
+    startNewConversation();
+    // Re-set active dataset since startNewConversation clears it by default
+    setActiveDataset(filename);
+
+    // 2. Fetch specialized metadata & insights for this specific file
+    fetchAssistantDetails(0, filename);
+
+    // 3. Initialize context with a professional neural synthesis message
+    const activationMessage = `Initializing neural focus on dataset: ‘${filename}’. Vector space synchronization complete. All analytical engines are now calibrated to this specific source. How would you like me to begin our analysis?`;
+
+    addSystemMessage(activationMessage);
   }
 
   return (
@@ -444,6 +477,12 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
                   </span>
                 </div>
               )}
+              {activeDataset && (
+                <div className="active-focus-pill" title={`Restricting neural search to: ${activeDataset}`}>
+                  <span className="focus-pulse"></span>
+                  FOCUS: {activeDataset.length > 20 ? activeDataset.substring(0, 17) + '...' : activeDataset}
+                </div>
+              )}
               <div className="active-status-pill">
                 <div className={`active-status-indicator ${isLoading ? 'pulsing' : ''}`}></div>
                 {isLoading ? 'Processing' : 'Context Ready'}
@@ -499,6 +538,8 @@ function ChatPage({ assistantId, assistantName, onNewAssistant, onHome, onViewHi
           dataSourceType={assistantDetails.data_source_type}
           fileHistory={assistantDetails.file_history}
           onDeleteFile={handleDeleteFile}
+          onActivateFile={handleActivateFile}
+          activeDataset={activeDataset}
           isOpen={isInsightsOpen}
           onClose={() => setIsInsightsOpen(false)}
           onToggle={() => setIsInsightsOpen(!isInsightsOpen)}
