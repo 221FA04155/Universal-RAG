@@ -1,0 +1,42 @@
+# Environment
+.env
+*.env.local
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+**/venv/
+**/env/
+**/.venv/
+**/__pycache__/
+
+# Node
+node_modules/
+**/node_modules/
+dist/
+build/
+.next/
+
+# Project Data (Exclude large files)
+uploads/
+**/uploads/
+vector_indices/
+**/vector_indices/
+vector_stores/
+**/vector_stores/
+
+# Logs & Temporal files
+*.log
+*.txt
+!README.md
+!requirements.txt
+backup/
+tmp/
+*.faiss
+*.pkl
+*.index

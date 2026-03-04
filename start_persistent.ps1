@@ -1,0 +1,12 @@
+$psi = New-Object System.Diagnostics.ProcessStartInfo;
+$psi.FileName = "c:\Users\Manikanta\Desktop\Dynamic-AI-Assistant\Dynamic-AI-Assistant-BD-main\backend\venv\Scripts\python.exe";
+$psi.Arguments = "-m uvicorn backend.main:app --host 0.0.0.0 --port 8000";
+$psi.WorkingDirectory = "c:\Users\Manikanta\Desktop\Dynamic-AI-Assistant\Dynamic-AI-Assistant-BD-main";
+$psi.Environment["PYTHONPATH"] = "c:\Users\Manikanta\Desktop\Dynamic-AI-Assistant\Dynamic-AI-Assistant-BD-main";
+$psi.Environment["KMP_DUPLICATE_LIB_OK"] = "TRUE";
+$psi.Environment["OMP_NUM_THREADS"] = "1";
+$psi.Environment["FOR_DISABLE_CONSOLE_CTRL_HANDLER"] = "T";
+$psi.UseShellExecute = $false;
+$psi.CreateNoWindow = $true;
+$proc = [System.Diagnostics.Process]::Start($psi);
+Write-Output "Started PID: $($proc.Id)";

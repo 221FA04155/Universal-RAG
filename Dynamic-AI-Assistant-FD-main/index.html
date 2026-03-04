@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/datamind-logo.png">
+    <title>DataMind - AI-Powered Knowledge Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        window.onerror = function (msg, url, lineNo, columnNo, error) {
+            var errorDiv = document.createElement('div');
+            errorDiv.style.cssText = 'position:fixed; top:20px; left:20px; right:20px; z-index:9999; padding: 20px; color: #ef4444; font-family: sans-serif; background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);';
+            errorDiv.innerHTML = '<h3>Application Error (Caught by Global Handler)</h3>' +
+                '<p><strong>Message:</strong> ' + msg + '</p>' +
+                '<p><strong>File:</strong> ' + url + ' (Line: ' + lineNo + ')</p>' +
+                '<button onclick="location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Reload Application</button>';
+            document.body.appendChild(errorDiv);
+            return false;
+        };
+    </script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

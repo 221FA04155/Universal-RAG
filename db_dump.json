@@ -1,0 +1,523 @@
+{
+  "users": [
+    {
+      "_id": "699560a7dc3ad91364813ac4",
+      "email": "UniversalRag@gmail.com",
+      "password_hash": "$2b$12$8sWVfyrxfgiGgVMBKOiwk.fNkcPJX/IwFqAos30IP2Rbn3reSRGeG",
+      "created_at": "2026-02-18T06:48:07.119000",
+      "updated_at": "2026-02-18T06:48:07.119000"
+    },
+    {
+      "_id": "6996b669921a5771805feb22",
+      "email": "12345ma@gmail.com",
+      "password_hash": "$2b$12$7/VhARICfp1bRcmUNa0YyO5U2UTMGDb0zo6.1arWKR56U0ISLLB6.",
+      "created_at": "2026-02-19T07:06:17.454000",
+      "updated_at": "2026-02-19T07:06:17.454000"
+    },
+    {
+      "_id": "6996f2593baa02f577d93fa6",
+      "email": "123man@gmail.com",
+      "password_hash": "$2b$12$4iBhI7M1KxW2aLg2Xwb2euPRBBizhYI13cbeFs6pL5gN5K1zi2YIK",
+      "created_at": "2026-02-19T11:22:01.793000",
+      "updated_at": "2026-02-19T11:22:01.793000"
+    },
+    {
+      "_id": "6997442a1c4616bb0a689c83",
+      "email": "Abcd123@gmail.com",
+      "password_hash": "$2b$12$DV04wH8Bz4lbI/Nz6uW/8emjOCC43yP5P3R7ZkDhfUApIdU0MKpAm",
+      "created_at": "2026-02-19T17:11:06.934000",
+      "updated_at": "2026-02-19T17:11:06.934000"
+    }
+  ],
+  "assistants": [
+    {
+      "_id": "699560dadc3ad91364813ac5",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "3f893a75-2d24-474d-9ac0-cb688004392d",
+      "name": "ctn mix",
+      "data_source_type": "json",
+      "data_source_url": "local://699560a7dc3ad91364813ac4/3f893a75-2d24-474d-9ac0-cb688004392d_cotton_mix.json",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 10,
+      "vector_store_path": "",
+      "attributes": [
+        "KG/BALE",
+        "KGS",
+        "LEN",
+        "LotNo",
+        "MAT",
+        "MIC",
+        "MOISTURE",
+        "Product Text",
+        "Qty -BALES",
+        "SAP Material Codes",
+        "SCI",
+        "SFI",
+        "Sloc",
+        "Station code",
+        "TRASH%",
+        "UNF",
+        "Value",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the KG/BALE in this data?",
+        "Which item has the highest KGS?",
+        "Compare the different values of KG/BALE.",
+        "Give me a summary of the dataset based on KG/BALE, KGS."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "SAP Material Codes Distribution",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH",
+            "CTG"
+          ],
+          "values": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "donut_chart": {
+          "title": "Product Text Breakdown",
+          "center_label": "4",
+          "center_text": "Types",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH"
+          ],
+          "values": [
+            4,
+            2,
+            2
+          ]
+        },
+        "line_chart": {
+          "title": "Qty -BALES Trend",
+          "avg_value": "28.6",
+          "trend_label": "Avg Value",
+          "trend_change": "+0.0%",
+          "data_points": [
+            8.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            8.0
+          ]
+        }
+      },
+      "created_at": "2026-02-18T06:48:58.207000"
+    },
+    {
+      "_id": "6996f26f3baa02f577d93fa7",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "f040db82-5665-47ac-b0bd-a0ee7a50a604",
+      "name": "manoj",
+      "data_source_type": "csv",
+      "data_source_url": "/api/files/6996f2593baa02f577d93fa6/f040db82-5665-47ac-b0bd-a0ee7a50a604_industry.csv",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 43,
+      "vector_store_path": "",
+      "attributes": [
+        "Industry",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the Industry in this data?",
+        "Which item has the highest assistant_id?",
+        "Compare the different values of Industry.",
+        "Give me a summary of the dataset based on Industry, assistant_id."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "Industry Distribution",
+          "labels": [
+            "Accounting/Finance",
+            "QA/Quality Control",
+            "Law Enforcement/Security",
+            "Legal",
+            "Management/Executive"
+          ],
+          "values": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "donut_chart": {
+          "title": "Industry Breakdown",
+          "center_label": "43",
+          "center_text": "Types",
+          "labels": [
+            "Accounting/Finance",
+            "QA/Quality Control",
+            "Law Enforcement/Security"
+          ],
+          "values": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "created_at": "2026-02-19T11:22:23.618000"
+    },
+    {
+      "_id": "6997443e1c4616bb0a689c84",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "afeae5c4-2b2c-4d03-981a-54cb6dd04f02",
+      "name": "manoj",
+      "data_source_type": "csv",
+      "data_source_url": "/api/files/6997442a1c4616bb0a689c83/afeae5c4-2b2c-4d03-981a-54cb6dd04f02_industry.csv",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 43,
+      "vector_store_path": "",
+      "attributes": [
+        "Industry",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the Industry in this data?",
+        "Which item has the highest assistant_id?",
+        "Compare the different values of Industry.",
+        "Give me a summary of the dataset based on Industry, assistant_id."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "Industry Distribution",
+          "labels": [
+            "Accounting/Finance",
+            "QA/Quality Control",
+            "Law Enforcement/Security",
+            "Legal",
+            "Management/Executive"
+          ],
+          "values": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "donut_chart": {
+          "title": "Industry Breakdown",
+          "center_label": "43",
+          "center_text": "Types",
+          "labels": [
+            "Accounting/Finance",
+            "QA/Quality Control",
+            "Law Enforcement/Security"
+          ],
+          "values": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "created_at": "2026-02-19T17:11:26.797000"
+    },
+    {
+      "_id": "699744691c4616bb0a689c85",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "b302e49f-f5ce-4b04-b65d-f632d4ebf53c",
+      "name": "mani",
+      "data_source_type": "json",
+      "data_source_url": "/api/files/6997442a1c4616bb0a689c83/b302e49f-f5ce-4b04-b65d-f632d4ebf53c_cotton_mix.json",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 10,
+      "vector_store_path": "",
+      "attributes": [
+        "KG/BALE",
+        "KGS",
+        "LEN",
+        "LotNo",
+        "MAT",
+        "MIC",
+        "MOISTURE",
+        "Product Text",
+        "Qty -BALES",
+        "SAP Material Codes",
+        "SCI",
+        "SFI",
+        "Sloc",
+        "Station code",
+        "TRASH%",
+        "UNF",
+        "Value",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the KG/BALE in this data?",
+        "Which item has the highest KGS?",
+        "Compare the different values of KG/BALE.",
+        "Give me a summary of the dataset based on KG/BALE, KGS."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "SAP Material Codes Distribution",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH",
+            "CTG"
+          ],
+          "values": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "donut_chart": {
+          "title": "Product Text Breakdown",
+          "center_label": "4",
+          "center_text": "Types",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH"
+          ],
+          "values": [
+            4,
+            2,
+            2
+          ]
+        },
+        "line_chart": {
+          "title": "Qty -BALES Trend",
+          "avg_value": "28.6",
+          "trend_label": "Avg Value",
+          "trend_change": "+0.0%",
+          "data_points": [
+            8.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            8.0
+          ]
+        }
+      },
+      "created_at": "2026-02-19T17:12:09.713000"
+    },
+    {
+      "_id": "69992518bdedd0a6b95041a2",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "38bd0c93-3604-403f-b3c5-42e419525566",
+      "name": "Mondem Manikanta",
+      "data_source_type": "json",
+      "data_source_url": "/api/files/699560a7dc3ad91364813ac4/38bd0c93-3604-403f-b3c5-42e419525566_cotton_mix.json",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 373,
+      "vector_store_path": "",
+      "attributes": [
+        "KG/BALE",
+        "KGS",
+        "LEN",
+        "LotNo",
+        "MAT",
+        "MIC",
+        "MOISTURE",
+        "Product Text",
+        "Qty -BALES",
+        "SAP Material Codes",
+        "SCI",
+        "SFI",
+        "Sloc",
+        "Station code",
+        "TRASH%",
+        "UNF",
+        "Value",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the KG/BALE in this data?",
+        "Which item has the highest KGS?",
+        "Compare the different values of KG/BALE.",
+        "Give me a summary of the dataset based on KG/BALE, KGS."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "SAP Material Codes Distribution",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH",
+            "CTG"
+          ],
+          "values": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "donut_chart": {
+          "title": "Product Text Breakdown",
+          "center_label": "4",
+          "center_text": "Types",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH"
+          ],
+          "values": [
+            4,
+            2,
+            2
+          ]
+        },
+        "line_chart": {
+          "title": "Qty -BALES Trend",
+          "avg_value": "28.6",
+          "trend_label": "Avg Value",
+          "trend_change": "+0.0%",
+          "data_points": [
+            8.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            8.0
+          ]
+        }
+      },
+      "created_at": "2026-02-21T03:23:04.550000",
+      "updated_at": "2026-02-24T03:39:19.425000"
+    },
+    {
+      "_id": "699926e2bdedd0a6b95041a3",
+      "user_id": "6997442a1c4616bb0a689c83",
+      "assistant_id": "a9ace4fb-f967-4e0c-a5d5-7f7e9ce8161e",
+      "name": "manoj",
+      "data_source_type": "json",
+      "data_source_url": "/api/files/6997442a1c4616bb0a689c83/a9ace4fb-f967-4e0c-a5d5-7f7e9ce8161e_cotton_mix.json",
+      "custom_instructions": "You are a helpful AI assistant. Analyze the data, identify patterns, and answer questions. You can make predictions based on data patterns when asked about hypothetical scenarios.If query Is not related to dataset reply \"Sorry! only Ask questions related to \"",
+      "enable_statistics": true,
+      "enable_alerts": true,
+      "enable_recommendations": true,
+      "documents_count": 10,
+      "vector_store_path": "",
+      "attributes": [
+        "KG/BALE",
+        "KGS",
+        "LEN",
+        "LotNo",
+        "MAT",
+        "MIC",
+        "MOISTURE",
+        "Product Text",
+        "Qty -BALES",
+        "SAP Material Codes",
+        "SCI",
+        "SFI",
+        "Sloc",
+        "Station code",
+        "TRASH%",
+        "UNF",
+        "Value",
+        "assistant_id",
+        "user_id"
+      ],
+      "sample_questions": [
+        "What can you tell me about the KG/BALE in this data?",
+        "Which item has the highest KGS?",
+        "Compare the different values of KG/BALE.",
+        "Give me a summary of the dataset based on KG/BALE, KGS."
+      ],
+      "graph_data": {
+        "bar_chart": {
+          "title": "SAP Material Codes Distribution",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH",
+            "CTG"
+          ],
+          "values": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "donut_chart": {
+          "title": "Product Text Breakdown",
+          "center_label": "4",
+          "center_text": "Types",
+          "labels": [
+            "CAH",
+            "S6",
+            "CMH"
+          ],
+          "values": [
+            4,
+            2,
+            2
+          ]
+        },
+        "line_chart": {
+          "title": "Qty -BALES Trend",
+          "avg_value": "28.6",
+          "trend_label": "Avg Value",
+          "trend_change": "+0.0%",
+          "data_points": [
+            8.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            20.0,
+            30.0,
+            40.0,
+            45.0,
+            8.0
+          ]
+        }
+      },
+      "created_at": "2026-02-21T03:30:42.868000"
+    }
+  ]
+}
